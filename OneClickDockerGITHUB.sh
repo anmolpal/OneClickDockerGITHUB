@@ -1,3 +1,52 @@
+#Shell_Script_for_Docker
+
+read -t 5 -p "<<<<<<<<<<<<<<<<< Creating User >>>>>>>>>>>>>>>>>>>>>>>>>>> "
+echo " "
+RED='\033[0;31m'
+echo -e "${RED}Do you want to create a new user to install Docker or you want to install Docker in the current user? [yes/no]"
+NC='\033[0m'
+echo -e "${NC}"
+read x
+if [[ "${x}" = "yes" ]]
+then
+    read -p "Enter new username: " userInput
+    cd /home
+    if [[ -d "$userInput" ]]
+    then
+        GREEN='\033[0;42m'
+        echo -e "${GREEN}User Exists"
+        NC='\033[0m'
+        echo -e "${NC}"
+    else 
+        echo "User does not exist. Creating now... "
+        sudo adduser $userInput
+        read -p "To give privileges to the user you have created enter username:"
+        sudo usermod -aG sudo $userInput
+        cd /home/$userInput
+        sudo wget https://github.com/anmolpal/OneClickDockerGITHUB/archive/refs/heads/main.zip
+        sudo unzip main.zip
+    fi    
+else
+    echo 'Skipped New User Creation'
+fi
+
+
+read -t 5 -p "<<<<<<<<<<<<<<<<< Loging into New User >>>>>>>>>>>>>>>>>>>>>>>>>>> "
+echo " "
+RED='\033[0;31m'
+echo -e "${RED}Do you want to login into New User or stay in Current User [yes/no]"
+NC='\033[0m'
+echo -e "${NC}"
+read x
+if [[ "${x}" = "yes" ]]
+then
+    echo " "
+    read -p "Login into your newly created user:"
+    su $REPLY
+else
+    echo "Continuing with Current User"
+fi    
+
 
 #To delete a user
 #sudo deluser username
@@ -39,6 +88,7 @@ NC='\033[0m'
 echo -e "${NC}"
 echo "spark"
 echo "hadoop"
+echo "postgresql"
 read  x
 if [[ "${x}" = "spark" ]]
 then
@@ -56,8 +106,8 @@ then
 
 elif [[ "${x}" = "hadoop" ]]
 then
-	docker pull lewuathe/hadoop-master
-	sudo apt-get install unzip
+    docker pull lewuathe/hadoop-master
+    sudo apt-get install unzip
     cd /usr/local
     sudo wget https://github.com/anmolpal/Hadoop-Docker-Compose/archive/refs/heads/main.zip
     sudo unzip main.zip 
@@ -68,9 +118,14 @@ then
     cd /usr/local/ 
     sudo rm -rf main.zip
 
+elif [[ "${x}" = "postgresql" ]] 
+then
+    docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+        #statements    
 else
     echo "No selection choosen"
 fi 
+
 
 echo " "
 RED='\033[0;31m'
@@ -119,3 +174,5 @@ then
 else
     echo "No selection choosen"
 fi 
+
+
