@@ -106,8 +106,8 @@ then
 
 elif [[ "${x}" = "hadoop" ]]
 then
-    docker pull lewuathe/hadoop-master
-    sudo apt-get install unzip
+	docker pull lewuathe/hadoop-master
+	sudo apt-get install unzip
     cd /usr/local
     sudo wget https://github.com/anmolpal/Hadoop-Docker-Compose/archive/refs/heads/main.zip
     sudo unzip main.zip 
